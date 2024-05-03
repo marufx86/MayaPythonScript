@@ -114,3 +114,30 @@ def create_parent_child_sets():
 
 # Call the function to create parent-child relationships
 create_parent_child_sets()
+
+##############################################################################################################################################################################
+
+#make me a script for:
+
+#Iterate through all objects in the scene.
+#Check if the object name starts with "pCube".
+#Group objects with names starting with "pCube" into a group called "pCube_group".
+#Parent the objects to the "pCube_group".
+
+import maya.cmds as cmds
+
+def group_pcube_objects():
+    # Create the group (if it doesn't exist)
+    group_name = "pSphere_group"
+    if not cmds.objExists(group_name):
+        cmds.group(empty=True, name=group_name)
+
+    # Iterate through objects and group those starting with "pCube"
+    for obj in cmds.ls(type='transform'):
+        if obj.startswith("pSphere"):
+            cmds.parent(obj, group_name)
+
+    print(f"Grouped objects starting with 'pCube' under '{group_name}'")
+
+# Call the function
+group_pcube_objects()
