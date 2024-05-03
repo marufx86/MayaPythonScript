@@ -159,3 +159,56 @@ def group_solid_concrete_objects():
 
 # Call the function
 group_solid_concrete_objects()
+
+#####################################################################################################################################################################
+
+#assign materials based on the object name on outliner
+
+import maya.cmds as cmds
+
+def create_materials_from_names():
+    for obj in cmds.ls(type='transform'):
+        if obj.startswith("pool_Umbrella"):  # Adjust prefix as needed
+            # Extract base name (e.g., "pCube1")
+            base_name = obj.split("|")[-1] 
+            # Create new material name
+            material_name = base_name + "_m"
+            
+            # Create new Lambert material if it doesn't exist
+            if not cmds.objExists(material_name):
+                cmds.shadingNode('lambert', asShader=True, name=material_name)
+            
+            # Assign the new material to the object
+            cmds.select(obj)
+            cmds.hyperShade(assign=material_name)
+
+# Call the function
+create_materials_from_names()
+
+#####################################################################################################################################################################
+
+#create materials from names with random color
+
+import maya.cmds as cmds
+import random
+
+def create_materials_from_names_with_random_color():
+    for obj in cmds.ls(type='transform'):
+        if obj.startswith("generic"):  # Adjust prefix as needed
+            base_name = obj.split("|")[-1]
+            material_name = base_name + "_m"
+            
+            if not cmds.objExists(material_name):
+                cmds.shadingNode('lambert', asShader=True, name=material_name)
+                
+                # Generate random color
+                random_color = (random.random(), random.random(), random.random())
+                
+                # Set the color of the material
+                cmds.setAttr(material_name + ".color", *random_color) 
+            
+            cmds.select(obj)
+            cmds.hyperShade(assign=material_name)
+
+# Call the function
+create_materials_from_names_with_random_color()
