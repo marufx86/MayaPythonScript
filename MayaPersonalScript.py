@@ -136,3 +136,26 @@ def group_pcube_objects():
 
 # Call the function
 group_pcube_objects()
+
+#####################################################################################################################################################################
+
+#group everything with same middle name
+
+import maya.cmds as cmds
+
+def group_solid_concrete_objects():
+    group_name = "Solid_Concrete"  # Name for the group
+
+    # Create group if it doesn't exist
+    if not cmds.objExists(group_name):
+        cmds.group(empty=True, name=group_name)
+
+    # Find and group objects with "Solid_Concrete" in their name
+    for obj in cmds.ls(type='transform'): 
+        if "Solid_Concrete" in obj:
+            cmds.parent(obj, group_name)
+
+    print(f"Grouped objects containing 'Solid_Concrete' under '{group_name}'")
+
+# Call the function
+group_solid_concrete_objects()
