@@ -117,12 +117,7 @@ create_parent_child_sets()
 
 ##############################################################################################################################################################################
 
-#make me a script for:
-
-#Iterate through all objects in the scene.
-#Check if the object name starts with "pCube".
-#Group objects with names starting with "pCube" into a group called "pCube_group".
-#Parent the objects to the "pCube_group".
+#group everything with same name
 
 import maya.cmds as cmds
 
