@@ -57,6 +57,29 @@ def ungroup_unparent_and_delete_history():
 # Call the function to ungroup, unparent, and delete history
 ungroup_unparent_and_delete_history()
 
+###############################################################################################
+import maya.cmds as cmds
+
+def delete_empty_groups():
+    """Deletes all empty groups in the scene."""
+
+    # Get a list of all transform nodes (potential groups)
+    all_transforms = cmds.ls(type='transform')
+
+    # Iterate through each transform node
+    for transform in all_transforms:
+        # Check if it's a group (has children)
+        children = cmds.listRelatives(transform, children=True)
+        if not children:
+            # If no children, it's an empty group, so delete it
+            cmds.delete(transform)
+
+    print("Deleted all empty groups.")
+
+# Call the function to delete empty groups
+delete_empty_groups()
+###############################################################################################
+
 #############################################################################################
 
 # remove prefix from name
@@ -85,29 +108,6 @@ def remove_pasted_prefix():
 
 # Call the function to remove the prefix from selected objects
 remove_pasted_prefix()
-
-###############################################################################################
-import maya.cmds as cmds
-
-def delete_empty_groups():
-    """Deletes all empty groups in the scene."""
-
-    # Get a list of all transform nodes (potential groups)
-    all_transforms = cmds.ls(type='transform')
-
-    # Iterate through each transform node
-    for transform in all_transforms:
-        # Check if it's a group (has children)
-        children = cmds.listRelatives(transform, children=True)
-        if not children:
-            # If no children, it's an empty group, so delete it
-            cmds.delete(transform)
-
-    print("Deleted all empty groups.")
-
-# Call the function to delete empty groups
-delete_empty_groups()
-###############################################################################################
 
 ###############################################################################################
 
