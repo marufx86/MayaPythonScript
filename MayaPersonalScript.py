@@ -299,3 +299,37 @@ def rename_objects_with_material():
             print(f"No Shading Group found for {obj}")
 
 rename_objects_with_material()
+
+#####################################################################################################################################################################
+import maya.cmds as cmds
+
+def remove_prefix_from_names():
+    """
+    Removes the "pasted__" prefix from the names of selected objects.
+    """
+
+    selected_objects = cmds.ls(selection=True)
+
+    for obj in selected_objects:
+        if obj.startswith("pasted__"):
+            new_name = obj.replace("pasted__", "")
+            cmds.rename(obj, new_name)
+
+remove_prefix_from_names()
+
+########################################################################################################################################################################
+import maya.cmds as cmds
+
+def remove_double_prefix_from_materials():
+    """
+    Removes the "pasted__pasted__" prefix from the names of all materials in the scene.
+    """
+
+    all_materials = cmds.ls(materials=True)
+
+    for material in all_materials:
+        if material.startswith("pasted__pasted__"):
+            new_name = material.replace("pasted__pasted__", "")
+            cmds.rename(material, new_name)
+
+remove_double_prefix_from_materials()
