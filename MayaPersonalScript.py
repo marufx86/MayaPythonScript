@@ -235,3 +235,37 @@ def create_materials_from_names_with_random_color():
 
 # Call the function
 create_materials_from_names_with_random_color()
+
+############################################################################################################################################################################
+
+#replace the object name with material name(material should be lambert)
+import maya.cmds as cmds
+
+def rename_object_with_material():
+    """
+    Renames the selected object to the name of its assigned material.
+    """
+
+    selected_objects = cmds.ls(selection=True)
+
+    if selected_objects:
+        obj = selected_objects[0]  # Get the first selected object
+
+        # Find the Shading Group connected to the object's shape node
+        shape_node = cmds.listRelatives(obj, shapes=True)[0]
+        shading_group = cmds.listConnections(shape_node, type="shadingEngine")
+
+        if shading_group:
+            # Get the material connected to the Shading Group
+            material = cmds.listConnections(shading_group[0], source=True, destination=False)
+
+            if material:
+                material_name = material[0]  # Get the first assigned material
+                cmds.rename(obj, material_name)  # Rename the object
+            else:
+                print(f"No material connected to Shading Group of {obj}")
+        else:
+            print(f"No Shading Group found for {obj}")
+
+rename_object_with_material()
+#############################################################################################################################################################################
