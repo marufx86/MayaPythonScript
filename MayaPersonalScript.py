@@ -269,3 +269,33 @@ def rename_object_with_material():
 
 rename_object_with_material()
 #############################################################################################################################################################################
+
+#(batch select objects)replace the object name with material name(material should be lambert)
+
+import maya.cmds as cmds
+
+def rename_objects_with_material():
+    """
+    Renames selected objects to the names of their assigned materials.
+    """
+
+    selected_objects = cmds.ls(selection=True)
+
+    for obj in selected_objects:
+        # Find the Shading Group connected to the object's shape node
+        shape_node = cmds.listRelatives(obj, shapes=True)[0]
+        shading_group = cmds.listConnections(shape_node, type="shadingEngine")
+
+        if shading_group:
+            # Get the material connected to the Shading Group
+            material = cmds.listConnections(shading_group[0], source=True, destination=False)
+
+            if material:
+                material_name = material[0]  # Get the first assigned material
+                cmds.rename(obj, material_name)  # Rename the object
+            else:
+                print(f"No material connected to Shading Group of {obj}")
+        else:
+            print(f"No Shading Group found for {obj}")
+
+rename_objects_with_material()
