@@ -27,6 +27,36 @@ select_children_with_partial_name(parent_name, partial_name)
 
 ############################################################################################################################################################
 
+import maya.cmds as cmds
+
+def parent_outlines():
+  """Parents all objects ending with '_Outline' to their corresponding base object."""
+
+  # Get all objects in the scene
+  all_objects = cmds.ls()
+
+  # Loop through each object
+  for obj in all_objects:
+    # Check if the object ends with '_Outline'
+    if obj.endswith("_Outline"):
+      # Extract the base name without '_Outline'
+      base_name = obj[:-8]  # Remove the last 8 characters ("_Outline")
+
+      # Check if the base object exists
+      if cmds.objExists(base_name):
+        # Parent the outline to the base object
+        cmds.parent(obj, base_name)
+        print(f"'{obj}' is now parented to '{base_name}'")
+      else:
+        print(f"Warning: '{base_name}' does not exist. Could not parent '{obj}'.")
+
+# Call the function to parent all outlines
+parent_outlines()
+
+#example, if the scene contains dhaka and dhaka_Outline after running the script dhaka_Outline will become a child of dhaka 
+
+############################################################################################################################################################
+
 # Ungroup all and unparent all
 
 import maya.cmds as cmds
@@ -333,3 +363,54 @@ def remove_double_prefix_from_materials():
             cmds.rename(material, new_name)
 
 remove_double_prefix_from_materials()
+
+###########################################################################################################################################################################
+
+#add _1 at end of name to all the objects name
+import maya.cmds as cmds
+
+def add_suffix_to_objects(suffix="_1"):
+    """
+    Adds a specified suffix to the names of all objects in the scene.
+
+    Args:
+        suffix (str): The suffix to add (default: "_1").
+    """
+
+    all_objects = cmds.ls(transforms=True)
+
+    for obj in all_objects:
+        new_name = obj + suffix
+        cmds.rename(obj, new_name)
+
+# Example usage:
+add_suffix_to_objects("_1")  # Adds "_1" to all object names
+
+################################################################################################################################################################################
+
+#retain camera settings but delete objects, groups, material etc.
+import maya.cmds as cmds
+
+def clear_scene_keep_camera():
+    """
+    Clears the Maya scene but retains the active camera's near and far clip plane settings.
+    """
+
+    # Get the active camera
+    active_camera = cmds.lookThru(q=True)
+
+    # Get near and far clip plane values
+    near_clip = cmds.getAttr(f"{active_camera}.nearClipPlane")
+    far_clip = cmds.getAttr(f"{active_camera}.farClipPlane")
+
+    # Create a new scene (this deletes everything)
+    cmds.file(f=True, new=True)
+
+    # Get the new default camera
+    new_camera = cmds.lookThru(q=True)
+
+    # Set the near and far clip planes on the new camera
+    cmds.setAttr(f"{new_camera}.nearClipPlane", near_clip)
+    cmds.setAttr(f"{new_camera}.farClipPlane", far_clip)
+
+clear_scene_keep_camera()
