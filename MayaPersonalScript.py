@@ -331,6 +331,45 @@ def rename_objects_with_material():
 rename_objects_with_material()
 
 #####################################################################################################################################################################
+#(batch select objects)replace the object name with material name(material should be phong)
+import maya.cmds as cmds
+
+def rename_objects_with_material():
+    """
+    Renames all objects in the scene that have a Lambert or Phong material assigned.
+    """
+
+    all_objects = cmds.ls(type="transform")  # Get all transform nodes in the scene
+
+    for obj in all_objects:
+        # Find the Shading Group connected to the object's shape node
+        shape_node = cmds.listRelatives(obj, shapes=True)
+        if shape_node:
+            shape_node = shape_node[0]  # Get the first shape node
+            shading_group = cmds.listConnections(shape_node, type="shadingEngine")
+
+            if shading_group:
+                # Find the material connected to the Shading Group
+                # Check for both Lambert and Phong materials
+                lambert_material = cmds.listConnections(shading_group[0], source=True, destination=False, type="lambert")
+                phong_material = cmds.listConnections(shading_group[0], source=True, destination=False, type="phong")
+
+                if lambert_material:
+                    material_name = lambert_material[0]
+                    cmds.rename(obj, material_name)
+                elif phong_material:
+                    material_name = phong_material[0]
+                    cmds.rename(obj, material_name)
+                else:
+                    print(f"No Lambert or Phong material connected to Shading Group of {obj}")
+            else:
+                print(f"No Shading Group found for {obj}")
+        else:
+            print(f"No shape node found for {obj}")
+
+rename_objects_with_material()
+
+######################################################################################################################################################################
 import maya.cmds as cmds
 
 def remove_prefix_from_names():
