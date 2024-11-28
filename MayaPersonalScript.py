@@ -135,6 +135,39 @@ def group_individual_objects():
 group_individual_objects()
 
 #############################################################################################
+
+#############################################################################################
+##Script to Separate Individual Objects Inside Groups
+
+import maya.cmds as cmds
+
+def separate_objects_inside_groups():
+    """Separates objects inside groups using Maya's 'Separate' operation."""
+    
+    # Get all transform nodes in the scene
+    groups = cmds.ls(type='transform', long=True)
+
+    for group in groups:
+        # Get the children of the transform node (potential geometry)
+        children = cmds.listRelatives(group, children=True, fullPath=True) or []
+
+        for child in children:
+            # Check if the child is a mesh
+            shape = cmds.listRelatives(child, shapes=True, fullPath=True)
+            if shape and cmds.objectType(shape[0]) == 'mesh':
+                # Select the object and perform the 'Separate' operation
+                cmds.select(child)
+                try:
+                    cmds.polySeparate(child)
+                    print(f"Separated geometry for: {child} inside {group}")
+                except Exception as e:
+                    print(f"Could not separate {child}: {e}")
+
+# Call the function to separate geometry
+separate_objects_inside_groups()
+
+#############################################################################################
+
 #############################################################################################
 
 # remove prefix from name
