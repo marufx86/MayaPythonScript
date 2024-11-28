@@ -109,7 +109,32 @@ def delete_empty_groups():
 # Call the function to delete empty groups
 delete_empty_groups()
 ###############################################################################################
+###############################################################################################
 
+import maya.cmds as cmds
+
+def group_individual_objects():
+    """Groups individual objects into individual groups."""
+    
+    # Get a list of all top-level transform nodes (objects)
+    objects = cmds.ls(assemblies=True, long=True)
+    
+    for obj in objects:
+        # Check if the object is a transform (valid object)
+        if cmds.objectType(obj) == 'transform':
+            # Create a group for the object
+            group_name = "group_" + obj.split('|')[-1]  # Add 'group_' prefix to the object's name
+            group = cmds.group(empty=True, name=group_name)
+            
+            # Parent the object to the group
+            cmds.parent(obj, group)
+            
+            print(f"Grouped {obj} into {group_name}")
+
+# Call the function to group individual objects
+group_individual_objects()
+
+#############################################################################################
 #############################################################################################
 
 # remove prefix from name
